@@ -1,0 +1,483 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{setspace}
+\usepackage{hyperref}
+
+\setstretch{1.3}
+
+\begin{document}
+
+%---------------------------------------------------
+% Title Page
+%---------------------------------------------------
+\begin{titlepage}
+\centering
+{\Large \textbf{Indian Institute of Information Technology Bhagalpur}}\\[0.3cm]
+{\large Department of Electronics and Communication Engineering}\\[2cm]
+
+{\Huge \textbf{Project Report}}\\[0.4cm]
+{\Large on}\\[0.5cm]
+{\LARGE \textbf{Design and Implementation of 4:1 Multiplexer using Transmission Gates}}\\[0.3cm]
+{\Large (Using Cadence Virtuoso with GPDK 90nm Technology)}\\[2cm]
+
+\textbf{Submitted by:}\\[0.2cm]
+\large Nitish Kumar Thakur\\
+Roll No.: 250202011 \\
+Semester: 1st \\
+Course: Digital VLSI Design \\[2cm]
+
+\textbf{Under the Guidance of:}\\[0.2cm]
+\large Dr. Dheeraj Kumar Sinha \\[2cm]
+
+\vfill
+{\large Date of Submission: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_}\\[0.3cm]
+{\large Academic Year: 2025--2026}\\
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+%---------------------------------------------------
+\chapter{Abstract}
+The objective of this project is to design and implement a 4:1 multiplexer using CMOS transmission gates in Cadence Virtuoso with the GPDK 90nm technology library. The design was verified using the Spectre simulator under transient analysis. The output waveform confirms that the circuit correctly selects one of four input signals based on two select lines, demonstrating correct logical operation and low-power CMOS behavior.
+
+%---------------------------------------------------
+\chapter{Introduction}
+
+\section*{Multiplexer}
+A multiplexer (MUX) is a combinational circuit that selects one of several input signals and forwards the selected input to a single output line. It acts as a digital switch. A 4:1 multiplexer has four input data lines, two select lines, and one output.
+
+Multiplexers are widely used in data routing, signal selection, communication systems, and digital processors. The implementation using transmission gates offers reduced power dissipation and symmetrical switching behavior compared to conventional logic gate-based designs.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.3\textwidth]{4to1 mux.png}
+    \caption{Schematic of 4:1 Multiplexer }
+    \label{fig:mux_schematic}
+\end{figure}
+A 4:1 multiplexer uses two selection lines ($S_1$ and $S_0$) to select one of four input signals ($D_0$, $D_1$, $D_2$, $D_3$).
+
+\[
+Y = \overline{S_1}\overline{S_0}D_0 + \overline{S_1}S_0D_1 + S_1\overline{S_0}D_2 + S_1S_0D_3
+\]
+
+The selection logic can be implemented using CMOS transmission gates. Each transmission gate consists of one NMOS and one PMOS transistor connected in parallel, driven by complementary control signals. This configuration allows both high and low logic levels to pass efficiently.
+
+\subsection*{Truth Table}
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+\textbf{S1} & \textbf{S0} & \textbf{Selected Input} & \textbf{Output Y} \\
+\midrule
+0 & 0 & $D_0$ & $D_0$ \\
+0 & 1 & $D_1$ & $D_1$ \\
+1 & 0 & $D_2$ & $D_2$ \\
+1 & 1 & $D_3$ & $D_3$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+
+
+
+\section*{Transmission Gate}
+A transmission gate is a bidirectional switch made up of a parallel combination of an nMOS and a pMOS transistor. 
+The nMOS transistor passes strong logic ‘0’ but weak logic ‘1’, while the pMOS passes strong logic ‘1’ but weak logic ‘0’. 
+By combining both transistors in parallel and driving them with complementary control signals, the transmission gate can pass both logic levels efficiently.
+
+When the control input (EN) is high, the nMOS is ON and the pMOS is also ON (driven by the complement of EN), thus forming a closed switch between input and output. 
+When EN is low, both transistors are OFF, forming an open circuit. 
+Transmission gates are widely used in multiplexers, latches, and bus systems due to their low propagation delay and small area.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.3\textwidth]{CMOS_transmission_gate.png}
+    \caption{Schematic of Transmission gate  }
+    \label{fig:mux_schematic}
+\end{figure}
+\subsection*{Truth Table of Transmission Gate}
+
+\begin{table}[H]
+\centering
+
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Control (A)} & \textbf{Control (\={A})} & \textbf{Input (IN)} & \textbf{Output (OUT)} \\
+\hline
+0 & 1 & 0 or 1 & High Impedance (OFF state) \\
+\hline
+1 & 0 & 0 & 0 (ON state) \\
+\hline
+1 & 0 & 1 & 1 (ON state) \\
+\hline
+\end{tabular}
+\end{table}
+When the control signal \(A = 1\) and \(\overline{A} = 0\), both nMOS and pMOS transistors conduct, allowing the input signal to pass directly to the output. 
+When \(A = 0\) and \(\overline{A} = 1\), both transistors are OFF, isolating the input from the output and resulting in a high-impedance state.
+
+
+
+
+
+
+
+
+%---------------------------------------------------
+\chapter{Theory and Working Principle}
+\section*{Implementation of 4:1 Multiplexer Using 2:1 Multiplexers}
+
+A 4:1 multiplexer can be constructed by interconnecting three 2:1 multiplexers in a hierarchical structure. 
+The 4:1 MUX has four data inputs (\( I_0, I_1, I_2, I_3 \)), two selection inputs (\( S_1, S_0 \)), and one output (\( Y \)).
+
+The basic concept is to first select one input from each pair using two 2:1 multiplexers and then use a third 2:1 multiplexer to select between their outputs.
+
+\begin{itemize}
+    \item The first 2:1 MUX (MUX1) selects between \( I_0 \) and \( I_1 \) based on the select line \( S_0 \).
+    \item The second 2:1 MUX (MUX2) selects between \( I_2 \) and \( I_3 \) based on the same select line \( S_0 \).
+    \item The outputs of MUX1 and MUX2 are then connected as inputs to the third 2:1 MUX (MUX3), which is controlled by the select line \( S_1 \).
+\end{itemize}
+
+Thus, the logic expression for the output \( Y \) can be written as:
+\[
+Y = \overline{S_1}\left(\overline{S_0}I_0 + S_0I_1\right) + S_1\left(\overline{S_0}I_2 + S_0I_3\right)
+\]
+
+This approach makes the circuit modular and simplifies the design process, allowing reuse of the 2:1 MUX cell.
+When implemented using transmission gates, each 2:1 MUX consists of two transmission gates and one inverter. 
+Hence, a 4:1 MUX can be realized using six transmission gates and three inverters.
+
+This hierarchical design is highly efficient for CMOS-based implementation and forms the basis for larger multiplexing structures such as 8:1 or 16:1 MUXs.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{simple to 4to1 mux.jpg}
+    \caption{Implementation of 4:1 Multiplexer Using 2:1 Multiplexers }
+    \label{fig:mux_schematic}
+\end{figure}
+
+
+\section*{Design of 2:1 Multiplexer Using Transmission Gate}
+
+A 2:1 multiplexer (MUX) is a fundamental digital switching circuit that selects one of two input signals and forwards it to a single output line based on a select signal. 
+In CMOS design, this can be efficiently implemented using transmission gates instead of conventional logic gates, to achieve lower power consumption and higher speed.
+
+A transmission gate acts as a bidirectional switch controlled by complementary signals \( S \) and \( \overline{S} \). 
+For a 2:1 MUX, two transmission gates are used — one for each input.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{mux2to1 using trans.png}
+    \caption{ 2:1 Multiplexer Using Transmission Gate }
+    \label{fig:mux_schematic}
+\end{figure}
+
+
+
+
+
+
+
+\begin{itemize}
+    \item The first transmission gate connects input \( D_0 \) to the output when the select signal \( S = 0 \).
+    \item The second transmission gate connects input \( D_1 \) to the output when the select signal \( S = 1 \).
+\end{itemize}
+
+Each transmission gate is controlled by complementary signals:
+\[
+\text{For TG1: Control = } \overline{S}, \quad \text{For TG2: Control = } S
+\]
+
+When \( S = 0 \), TG1 is ON and TG2 is OFF, so \( D_0 \) is passed to the output.
+When \( S = 1 \), TG1 is OFF and TG2 is ON, so \( D_1 \) is passed to the output.
+
+The Boolean equation governing the 2:1 MUX is:
+\[
+Y = \overline{S} \cdot D_0 + S \cdot D_1
+\]
+
+This implementation requires two transmission gates and one inverter (to generate \(\overline{S}\)).
+
+The advantages of using transmission gates include:
+\begin{itemize}
+    \item Reduced transistor count compared to gate-based MUX design.
+    \item Full voltage swing and minimal signal degradation.
+    \item Symmetrical operation for logic ‘0’ and logic ‘1’.
+\end{itemize}
+
+Thus, the 2:1 MUX using transmission gates provides an area-efficient and power-efficient design suitable for VLSI applications.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%---------------------------------------------------
+\chapter{Design Methodology}
+
+\section*{Software Used}
+\begin{itemize}
+    \item \textbf{Cadence Virtuoso} (Analog Design Environment)
+    \item \textbf{Spectre Simulator}
+    \item \textbf{GPDK 90nm Technology Library}
+\end{itemize}
+
+
+
+
+
+
+
+\section*{Design Steps}
+
+The following steps were followed to design and implement the 4:1 multiplexer using transmission gates in Cadence Virtuoso with the GPDK 90nm technology library:
+
+\begin{enumerate}
+
+\item \textbf{Create a New Library & Cell:} 
+    In the Cadence Virtuoso Library Manager, a new Library named \texttt{MUX90nm} was created under the working library gpdk090.(Figure 4.1)
+
+    
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{step1.jpg}
+    \caption{ Create a New Library }
+    \label{fig:mux_schematic}
+\end{figure}
+
+
+    
+\item \textbf{Design of Transmission Gate:} 
+(Figure 4.2)
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{step2.jpg}
+    \caption{ Transmission Gate }
+    \label{fig:mux_schematic}
+\end{figure}
+
+
+
+\item \textbf{Design of Inverter:}
+(Figure 4.3)
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{step3.jpg}
+    \caption{ Inverter}
+    \label{fig:mux_schematic}
+\end{figure}
+
+
+
+    \item \textbf{Design of 2:1 MUX:} 
+    A 2:1 multiplexer was first designed using two transmission gates and one inverter.
+    Each transmission gate consists of one nMOS and one pMOS transistor connected in parallel, controlled by complementary select signals \( S \) and \( \overline{S} \).
+    The schematic was verified and simulated to ensure correct operation.(Figure 4.4)
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{step4.jpg}
+    \caption{ 2:1 MUX Using ransmission Gate}
+    \label{fig:mux_schematic}
+\end{figure}
+
+
+
+
+
+    \item \textbf{Implementation of 4:1 MUX:} 
+    Using the verified 2:1 MUX cell, a 4:1 multiplexer was constructed by interconnecting three 2:1 MUX blocks.
+    The select lines \( S_1 \) and \( S_0 \) were used to choose one of the four input signals \( (D_0, D_1, D_2, D_3) \).
+    The final output \( F \) was taken from the output of the last 2:1 MUX.(Figure 4.5)
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{step5.jpg}
+    \caption{ 4:1 MUX Using 2:1 MUX}
+    \label{fig:4:1 mux_schematic}
+\end{figure}
+
+
+
+
+
+
+
+    \item \textbf{Input Signal Generation:}
+    Input data signals (\( D_0, D_1, D_2, D_3 \)) and select signals (\( S_0, S_1 \)) were generated using \texttt{vpulse} sources from the \texttt{analogLib}.
+    The supply voltage \( V_{DD} \) was set to 1.2 V.(Figure 4.6)
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1.1\textwidth]{STEP7.jpg}
+    \caption{ transient analysis SETUP}
+    \label{fig:transient analysis SETUP}
+\end{figure}
+
+
+
+
+
+    \item \textbf{Simulation Setup:}
+    The schematic was simulated using the Spectre simulator.
+    A transient analysis was performed to verify the output waveform corresponding to all combinations of select lines.(Figure 4.7)
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{STEP8.jpg}
+    \caption{ Simulation Setup VIRTUOSO}
+    \label{fig:Simulation Setup VIRTUOSO}
+\end{figure}
+
+
+
+   
+
+    \item \textbf{Verification:}
+    The transient simulation waveform was observed to verify that the output \( Y \) correctly follows the selected input based on \( S_1 \) and \( S_0 \).
+\end{enumerate}
+
+Thus, the 4:1 multiplexer was successfully designed, simulated, and verified using transmission gate logic in 90nm CMOS technology.
+
+
+
+
+
+
+
+
+
+
+%---------------------------------------------------
+
+
+%---------------------------------------------------
+\chapter{Results and Discussion}
+\section*{Simulation Setup}
+
+\begin{table}[H]
+\centering
+\caption{Simulation Parameters}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\ \midrule
+Technology & GPDK 90nm \\
+Supply Voltage ($V_{DD}$) & 1.2 V \\
+Simulation Type & Transient \\
+Stop Time & 300 ns \\
+Time Step & 0.1 ns \\
+Simulator & Spectre \\ \bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\section*{Observation Table}
+\begin{center}
+\begin{tabular}{cccl}
+\toprule
+\textbf{Time Range (ns)} & \textbf{S1(net7)} & \textbf{S0(net8)} & \textbf{Selected Input (Y)} \\
+\midrule
+122–160 & 0 & 0 & $I_0(net06)$ \\
+82–122 & 0 & 1 & $I_1(net08)$ \\
+42–82 & 1 & 0 & $I_2(net05)$ \\
+0–42 & 1 & 1 & $I_3(net07)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+\section*{Simulation Waveforms}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{case1.jpg}
+    \caption{ S1 & S2 Waveform}
+    \label{fig:S1 & S2 Waveform}
+\end{figure}
+
+
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{case2.jpg}
+    \caption{ upto 40ns Y=I3(net07)}
+    \label{fig:upto 40ns Y=net07}
+\end{figure}
+
+
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\textwidth]{cse3.jpg}
+    \caption{ 40ns-82ns: Y=I2(net05)}
+    \label{fig:40ns-82ns: Y=net05}
+\end{figure}
+
+
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\textwidth]{case4.jpg}
+    \caption{ 82ns-122ns:Y=I1(net08)}
+    \label{fig:82ns-122ns:Y=net08}
+\end{figure}
+
+
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\textwidth]{case6.jpg}
+    \caption{ 122ns-162ns:Y=I0(net06)}
+    \label{fig:122ns-162ns:Y=net06}
+\end{figure}
+
+
+
+\section*{Discussion}
+The waveform confirms correct logical operation. During each 40 ns interval, the select lines determine which input signal is propagated to the output. The output follows the correct input as expected, validating the functionality of the 4:1 MUX.
+
+%---------------------------------------------------
+\chapter{Conclusion}
+The 4:1 multiplexer was successfully designed and simulated using CMOS transmission gates in Cadence Virtuoso with GPDK 90nm technology. The transient analysis verified that the output follows the correct input depending on the selection lines. The results demonstrate proper digital switching and confirm the theoretical operation.
+
+%---------------------------------------------------
+\chapter{References}
+\begin{enumerate}
+    \item CMOS Digital Integrated Circuits – Sung-Mo Kang and Yusuf Leblebici
+    \item Digital Integrated Circuits: A Design Perspective-Jan M. Rabaey
+    \item Figure 2.1,2.2,3.1,3.2-From Google search/internet
+    \item Cadence Virtuoso Design Environment User Guide
+    \item Digital Design – Morris Mano
+    \item CMOS VLSI Design-Neil H. E. Weste
+\end{enumerate}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+

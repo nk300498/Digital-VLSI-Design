@@ -1,0 +1,443 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{setspace}
+\setstretch{1.2}
+
+
+
+\begin{document}
+
+
+
+
+
+
+
+
+% ============================================================
+% EXPERIMENT 2
+% ============================================================
+\section{Experiment 2: PMOS Transfer \& Output Characteristics}
+
+\textbf{Aim:}  
+To plot and analyze the transfer (Id–V\textsubscript{SG}) and output (Id–V\textsubscript{SD}) characteristics of a PMOS transistor using Cadence Virtuoso (90nm GPDK).
+
+\textbf{Objective:}
+\begin{itemize}
+    \item To design PMOS testbench for DC analysis.
+    \item To obtain Id–V\textsubscript{SG} and Id–V\textsubscript{SD} curves.
+    \item To extract $|V_{th}|$, transconductance $g_m$, output resistance $r_o$, and channel-length modulation $\lambda$.
+\end{itemize}
+
+\textbf{Equipment/Software:}
+Cadence Virtuoso, ADE L/XL, gpdk090 library.
+
+\textbf{Theory:}  
+A PMOS transistor conducts when the gate is sufficiently negative with respect to the source.  
+Saturation region equation:
+\[
+|I_D| = \frac{1}{2}\mu_p C_{ox}\frac{W}{L}(V_{SG}-|V_{th}|)^2(1+\lambda V_{SD})
+\]
+
+\textbf{Procedure:}
+\begin{enumerate}
+    \item Create a PMOS device with source and bulk tied to VDD.
+    \item Sweep gate voltage to vary V\textsubscript{SG} for transfer characteristics.
+    \item Sweep drain voltage to vary V\textsubscript{SD} for output characteristics.
+    \item Run DC analysis and record Id.
+\end{enumerate}
+
+\textbf{Result:}  
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{pmos circuit.jpg}
+    \caption{PMOS Testbench Circuit in Cadence Virtuoso}
+    \label{fig:circuit}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{nmos tranf.jpg}
+    \caption{PMOS Transfer Characteristics in Cadence Virtuoso}
+    \label{fig:circuit}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{pmos output char.jpg}
+    \caption{PMOS Output Characteristics in Cadence Virtuoso}
+    \label{fig:circuit}
+\end{figure}
+
+
+\textbf{Conclusion:}  
+PMOS characteristics were obtained and key parameters extracted.
+
+\newpage
+
+% ============================================================
+% EXPERIMENT 3
+% ============================================================
+\section{Experiment 3: Transient Analysis of CMOS Inverter}
+
+\textbf{Aim:}  
+To perform transient analysis of CMOS inverter using a load capacitor and analyze output behavior for different W/L ratios.
+
+\textbf{Objective:}
+\begin{itemize}
+    \item To study inverter input-output waveform.
+    \item To calculate rise/fall delay.
+    \item To observe effect of transistor sizing and load capacitance.
+\end{itemize}
+
+\textbf{Equipment/Software:}  
+Cadence Virtuoso, ADE Transient Analysis.
+
+\textbf{Theory:}  
+Propagation delay:
+\[
+t_{pd} = R_{eq}C_L
+\]
+Increasing W/L reduces delay; increasing load capacitance increases delay.
+
+\textbf{Procedure:}
+\begin{enumerate}
+    \item Build CMOS inverter using PMOS (W/L larger) and NMOS (W/L smaller).
+    \item Apply pulse input (0–VDD).
+    \item Connect load capacitor (CL).
+    \item Change W/L ratios and observe delay variation.
+\end{enumerate}
+
+\textbf{Result:}  
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Cmos Inverter.jpg}
+    \caption{CMOS Inverter Circuit}
+    \label{fig:circuit}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Cmos trans .jpg}
+    \caption{CMOS Inverter Output Transient}
+    \label{fig:circuit}
+\end{figure}
+
+
+
+
+
+
+
+
+\textbf{Conclusion:}  
+Inverter delay decreases with larger W/L and increases with larger load capacitor.
+
+\newpage
+
+% ============================================================
+% EXPERIMENT 4
+% ============================================================
+\section{Experiment 4: DC Analysis of CMOS Inverter}
+
+\textbf{Aim:}  
+To perform DC sweep analysis and obtain Voltage Transfer Curve (VTC) of CMOS inverter.
+
+\textbf{Objective:}
+\begin{itemize}
+    \item To plot Vout vs Vin.
+    \item To determine switching threshold (Vm).
+    \item To analyze effect of NMOS/PMOS sizing.
+\end{itemize}
+
+\textbf{Theory:}  
+The VTC shows noise margins and switching characteristics of inverter.  
+Proper PMOS/NMOS sizing shifts the switching threshold.
+
+\textbf{Procedure:}
+\begin{enumerate}
+    \item Implement CMOS inverter.
+    \item Apply DC sweep to Vin from 0 to VDD.
+    \item Observe Vout response.
+    \item Change W/L values and repeat.
+\end{enumerate}
+
+\textbf{Result:}  
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Cmos Inverter_dc.jpg}
+    \caption{CMOS Inverter Connection for DC analysis}
+    \label{fig:circuit}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Inverter dc transfer curve .jpg}
+    \caption{CMOS Inverter Transfer Characteristic}
+    \label{fig:circuit}
+\end{figure}
+
+
+
+
+\textbf{Conclusion:}  
+Switching threshold shifts with different PMOS/NMOS sizing.
+
+\newpage
+
+% ============================================================
+% EXPERIMENT 5
+% ============================================================
+\section{Experiment 5: CMOS NAND and NOR Gate Implementation}
+
+\textbf{Aim:}  
+To design and simulate CMOS NAND and NOR gates using PMOS and NMOS transistors.
+
+\textbf{Objective:}
+\begin{itemize}
+    \item To construct 2-input NAND and NOR circuits.
+    \item To verify truth table through simulation.
+\end{itemize}
+
+\textbf{Theory:}  
+\begin{itemize}
+    \item NAND: PMOS in parallel, NMOS in series.
+    \item NOR: PMOS in series, NMOS in parallel.
+\end{itemize}
+
+\textbf{Procedure:}
+\begin{enumerate}
+    \item Draw transistor-level schematic for NAND and NOR.
+    \item Apply all input combinations.
+    \item Simulate output waveform.
+\end{enumerate}
+
+\textbf{Result:}  
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{nand.jpg}
+    \caption{NAND GATE }
+    \label{fig:circuit}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{nor.jpg}
+    \caption{NOR GATE}
+    \label{fig:circuit}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{nand_out.jpg}
+    \caption{NAND output in Cadence Virtuoso}
+    \label{fig:circuit}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{nor_out.jpg}
+    \caption{NOR output in Cadence Virtuoso}
+    \label{fig:circuit}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\textbf{Conclusion:}  
+Both universal gates implemented successfully.
+
+\newpage
+
+% ============================================================
+% EXPERIMENT 6
+% ============================================================
+\section{Experiment 6: Implementation of 2:1 MUX Using NAND Gates}
+
+\textbf{Aim:}  
+To implement a 2:1 multiplexer using NAND gate logic and verify through simulation.
+
+\textbf{Objective:}
+\begin{itemize}
+    \item Realize MUX function using NAND-based NOT, AND, OR blocks.
+    \item Verify output using simulation.
+\end{itemize}
+
+\textbf{Theory:}  
+MUX function:
+\[
+Y = \bar{S}D_0 + SD_1
+\]
+
+\textbf{Procedure:}
+\begin{enumerate}
+    \item Implement NOT, AND, OR using NAND gates.
+    \item Connect them to form the 2:1 MUX logic.
+    \item Apply S, D0, D1 combinations.
+\end{enumerate}
+
+\textbf{Result:}  
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{2to1mux from nandckt.jpg}
+    \caption{2:1 MUX From NAND Gate}
+    \label{fig:circuit}
+\end{figure}
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{2to1mux testbench .jpg}
+    \caption{MUX CONNECTION}
+    \label{fig:circuit}
+\end{figure}
+
+
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{mux2to1 output.jpg}
+    \caption{MUX Output waveform}
+    \label{fig:circuit}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\textbf{Conclusion:}  
+MUX output matches the expected truth table.
+
+\newpage
+
+% ============================================================
+% EXPERIMENT 7
+% ============================================================
+\section{Experiment 7: Implementation of 4:1 MUX Using NAND Gates}
+
+\textbf{Aim:}  
+To design and simulate 4:1 multiplexer using NAND-only logic.
+
+\textbf{Objective:}
+\begin{itemize}
+    \item Implement 4:1 MUX using NAND-based logic blocks.
+    \item Verify output for all select line combinations.
+\end{itemize}
+
+\textbf{Theory:}  
+4:1 MUX equation:
+\[
+Y = \bar{S_1}\bar{S_0}D_0 + \bar{S_1}S_0D_1 + S_1\bar{S_0}D_2 + S_1S_0D_3
+\]
+
+\textbf{Procedure:}
+\begin{enumerate}
+    \item Realize required AND/OR/NOT combinations using NAND logic.
+    \item Connect all blocks to form full 4:1 multiplexer.
+    \item Apply all select and data inputs.
+\end{enumerate}
+
+\textbf{Result:}  
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{4to1 from 2to1 ckt.jpg}
+    \caption{4:1MUX Circuit from 2:1 MUX}
+    \label{fig:circuit}
+\end{figure}
+
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{4to1 mux digital figure.jpg}
+    \caption{Circuit connection Of MUX}
+    \label{fig:circuit}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{4to1 mux output.jpg}
+    \caption{OUTPUT Waveform From 4:1MUX}
+    \label{fig:circuit}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+\textbf{Conclusion:}  
+4:1 MUX successfully designed and verified.
+
+\end{document}

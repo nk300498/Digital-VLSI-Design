@@ -1,0 +1,127 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{float}
+
+\title{\textbf{Plot and Analyze Transfer \& Output Characteristics of NMOS using Cadence Virtuoso (90nm GPDK)}}
+
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Aim}
+To plot and analyze the transfer (Id–Vgs) and output (Id–Vds) characteristics of an NMOS transistor using Cadence Virtuoso with 90nm GPDK technology.
+
+\section*{Objective}
+\begin{itemize}
+    \item To design an NMOS testbench in Virtuoso using the 90nm GPDK library.
+    \item To obtain the transfer characteristics (Id vs. Vgs) at different values of Vds.
+    \item To obtain the output characteristics (Id vs. Vds) at different values of Vgs.
+    \item To extract NMOS parameters such as threshold voltage (Vth), transconductance (gm), output resistance (r\textsubscript{o}), channel-length modulation ($\lambda$), and Early voltage (V\textsubscript{A}).
+\end{itemize}
+
+\section*{Equipment / Software Used}
+\begin{itemize}
+    \item Cadence Virtuoso Schematic Editor
+    \item ADE L / ADE XL Simulation Environment
+    \item GPDK 90nm Technology Library
+    \item ViVA Waveform Viewer
+\end{itemize}
+\\
+
+\section*{Theory}
+
+The NMOS transistor operates based on the voltage applied between its terminals. Two fundamental characteristics are studied:
+
+\subsection*{1. Transfer Characteristics (Id--Vgs)}
+The transfer characteristic relates the drain current $I_D$ to the gate voltage $V_{GS}$ for a fixed value of $V_{DS}$.
+
+In saturation:
+\[
+I_D = \frac{1}{2}\mu C_{ox}\frac{W}{L}(V_{GS} - V_{th})^2 (1 + \lambda V_{DS})
+\]
+
+\subsection*{2. Output Characteristics (Id--Vds)}
+The output characteristic relates the drain current $I_D$ to the drain voltage $V_{DS}$ for different values of $V_{GS}$.
+
+Output resistance:
+\[
+r_o = \left( \frac{\partial I_D}{\partial V_{DS}} \right)^{-1}
+\]
+
+Channel-length modulation:
+\[
+\lambda = \frac{1}{V_A}
+\]
+
+Transconductance:
+\[
+g_m = \frac{\partial I_D}{\partial V_{GS}}
+\]
+
+\section*{Procedure (Simulation Steps)}
+\begin{enumerate}
+    \item Create a new schematic in Virtuoso.
+    \item Place an NMOS device from the gpdk090 library and set dimensions:
+    \[
+    W = 1\mu m,\quad L = 90nm
+    \]
+    \item Connect gate and drain to DC voltage sources (Vg and Vd), and connect source and bulk to ground.
+    \item Open ADE L $\rightarrow$ Select DC Analysis.
+    \item For transfer characteristics: Sweep $V_{GS}$ from 0 to 1.2\,V for fixed $V_{DS}$ values (e.g., 50\,mV and 1.2\,V).
+    \item For output characteristics: Sweep $V_{DS}$ from 0 to 1.2\,V for different $V_{GS}$ values.
+    \item Plot drain current $I_D$ using ViVA and extract parameters (Vth, gm, r\textsubscript{o}, $\lambda$).
+\end{enumerate}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{nmos ckt 2.jpg}
+    \caption{NMOS Testbench Circuit in Cadence Virtuoso}
+    \label{fig:circuit}
+\end{figure}
+\section*{Results from Simulation}
+
+\subsection*{Transfer Characteristics (Id--Vgs)}
+\begin{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{nmos tranf.jpg}
+    \caption{NMOS Transfer Characteristics in Cadence Virtuoso}
+    \label{fig:circuit}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+    
+\end{itemize}
+
+\subsection*{Output Characteristics (Id--Vds)}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{output cha.jpg}
+    \caption{NMOS Output Characteristics in Cadence Virtuoso}
+    \label{fig:circuit}
+\end{figure}
+
+
+\section*{Conclusion}
+The transfer and output characteristics of the NMOS transistor were successfully plotted using Cadence Virtuoso. Important device parameters such as $V_{th}$, $g_m$, $r_o$, and $\lambda$ were extracted and analyzed. The results align with the expected behavior of a 90nm NMOS device.
+
+\section*{References}
+\begin{enumerate}
+    \item Cadence Virtuoso Documentation.
+    \item GPDK 90nm Model File Reference Manual.
+    \item Sedra \& Smith: Microelectronic Circuits.
+\end{enumerate}
+
+\end{document}
